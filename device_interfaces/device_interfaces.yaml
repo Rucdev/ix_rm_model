@@ -1,0 +1,59 @@
+module: ix_device_interfaces
+short_description: 
+description:
+version_added: "1.1.0"
+author:
+    - "Chihiro Nakayama"
+notes: 
+  - Tested against NEC IX2105 Version 10.2.39.
+  - This module works with connection network_cli.
+
+options:
+  config:
+    description: A dictionary of interface options.
+    type: list
+    elements: dict
+    suboptions:
+      name:
+        description: 
+          - The name of the interface, e.g. GitEthernet0.0, Loopback0, etc.
+        type: str
+        required: true
+      duplex:
+        description: 
+          - The duplex mode of the interface.
+        type: str
+        choices:
+          - auto
+          - full
+          - half
+        default: auto
+      # ifspeed_change:
+      #   description:
+      #     - Enable notice of speed change
+      #   type: bool
+      #   default: false
+      keepalive:
+        description:
+          - Enable device keepalive
+        type: int
+        default: 4
+      mdix:
+        description:
+          - The MDI/MDIX mode of the interface.
+        type: str
+        choices:
+          - mdi
+          - mdix
+        default: mdi
+      output-buffer:
+        description:
+          - The number of output buffers.
+        type: int
+      
+  reset:
+    name:
+      description: 
+        - The name of the interface, e.g. GitEthernet0.0, Loopback0, etc.
+      type: bool
+      
