@@ -1,10 +1,10 @@
 module: ix_device_interfaces
-short_description: 
+short_description:
 description:
 version_added: "1.1.0"
 author:
-    - "Chihiro Nakayama"
-notes: 
+  - "Chihiro Nakayama"
+notes:
   - Tested against NEC IX2105 Version 10.2.39.
   - This module works with connection network_cli.
 
@@ -15,12 +15,12 @@ options:
     elements: dict
     suboptions:
       name:
-        description: 
+        description:
           - The name of the interface, e.g. GitEthernet0.0, Loopback0, etc.
         type: str
         required: true
       duplex:
-        description: 
+        description:
           - The duplex mode of the interface.
         type: str
         choices:
@@ -28,16 +28,10 @@ options:
           - full
           - half
         default: auto
-      # ifspeed_change:
-      #   description:
-      #     - Enable notice of speed change
-      #   type: bool
-      #   default: false
       keepalive:
         description:
           - Enable device keepalive
         type: int
-        default: 4
       mdix:
         description:
           - The MDI/MDIX mode of the interface.
@@ -45,15 +39,50 @@ options:
         choices:
           - mdi
           - mdix
-        default: mdi
       output-buffer:
         description:
           - The number of output buffers.
         type: int
-      
+      sflow:
+        description:
+          - The sFlow configuration of the interface.
+        max_header_size:
+          description:
+            - The maximum header size of the sFlow.
+          type: int
+        polling_interval:
+          description:
+            - The polling interval of the sFlow.
+          type: int
+        sampling_rate:
+          description:
+            - The sampling rate of the sFlow.
+          type: int
+      speed:
+        description:
+          - The speed of the interface.
+        type: str
+        choices:
+          - 10
+          - 100
+          - 1000
+          - auto
   reset:
     name:
-      description: 
+      description:
         - The name of the interface, e.g. GitEthernet0.0, Loopback0, etc.
       type: bool
-      
+  state:
+    description:
+      - The state of the interface configuration.
+    type: str
+    choices:
+      - merged
+      - replaced
+      - overridden
+      - deleted
+      - rendered
+      - gathered
+      - purged
+      - parsed
+    default: merged
