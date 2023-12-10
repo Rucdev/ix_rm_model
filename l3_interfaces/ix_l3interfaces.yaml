@@ -1,0 +1,81 @@
+module: ix_l3_interfaces
+short_description: Resource module to configure L3 interfaces.
+description:
+  - This module provides declarative management of Layer-3 interface on NEC IX devices.
+version_added: 1.1.0
+author:
+  - Yushi Takeda(@Rucdev)
+notes:
+  - Tested against NEC IX version 10.2.39 on IX 2105.
+options:
+  config:
+    description: A dictionary of Layer-3 interface options.
+    type: list
+    elements: dict
+    suboptions:
+      name:
+        description:
+          - Full name of the interface excluding any logical unit number, i.e. GigaEthernet1.1
+        type: str
+        required: true
+      ipv4:
+        description:
+          - IPv4 address to be set for the Layer-3 interface mentioned in I(name) option.
+            The address format is <ipv4 address>/<mask>, the mask is number in range
+            0-32 eg. 192.168.0.1/24.
+        type: list
+        elements: dict
+        suboptions:
+          address:
+            description:
+              - Configure ipv4 address for interfaces.
+            type: str
+          secondary:
+            description:
+              - Configure the IP address as a secondary address.
+            type: bool
+          mtu:
+            description:
+              - MTU for a specific interface. Applicable for Ethernet interfaces only.
+              - Refer to vendor documentation for valid values.
+            type: int
+          dhcp:
+            description:
+              - IP address negotiated via DHCP.
+            type: dict
+            suboptions:
+              enable:
+                description:
+                  - Enable DHCP.
+                type: bool
+      ipv6:
+        description:
+          - IPv6 address to be set for the Layer-3 logical interface mentioned in I(name) option.
+          - The address format is <ipv6 address>/<mask>, the mask is number in range
+            0-128 eg. fd5d:12c9:2201:1::1/64 
+        type: list
+        elements: dict
+        suboptions:
+          address:
+            description:
+              - Configures the IPv6 address for Interface.
+            type: str
+          autoconfig:
+            description: Obtain address using auto-configuration.
+            type: dict
+            suboptions:
+              enable:
+                description: enable auto-configuration.
+                type: bool
+              default:
+                description: Insert default route.
+                type: bool
+          anycast:
+            description: Configure as an anycast
+            type: bool
+          eui:
+            description: Use eui-64 interface identifier
+            type: bool
+          
+
+

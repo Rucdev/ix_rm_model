@@ -1,0 +1,10 @@
+# Using overridden
+
+- name: Overrides all device configuration with provided configuration
+  rucdev.ix.ix_interfaces:
+    config:
+      - name: GigaEthernet0.0
+        enabled: true
+      - name: GigaEthernet1.0
+        description: Configured and Overridden by Ansible Network
+    state: overridden

@@ -1,0 +1,10 @@
+# Using replaced
+
+- name: Replaces device configuration of listed interfaces with provided configuration
+  rucdev.ix.ix_interfaces:
+    config:
+      - name: GigaEthernet0.0
+        description: Configured and Replaced by Ansible Network
+        enabled: false
+        mtu: 1200
+    state: replaced
