@@ -1,0 +1,10 @@
+# Using merged
+#
+#
+- name: Merge provided configuration with device configuration
+  rucdev.ix.ix_l3_interfaces:
+    config:
+      - name: GigaEthernet0.0
+        ipv4:
+          address: 192.168.1.1/24
+    state: merged
