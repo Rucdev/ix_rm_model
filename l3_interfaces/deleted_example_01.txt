@@ -1,0 +1,7 @@
+# Using deleted
+
+- name: Delete or return interface parameters to default settings
+  rucdev.ix.ix_l3_interfaces:
+    config:
+      - name: GigaEthernet0.0
+    state: deleted
