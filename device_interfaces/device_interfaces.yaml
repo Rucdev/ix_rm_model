@@ -1,13 +1,25 @@
+GENERATOR_VERSION: "1.0"
+ANSIBLE_METADATA: |
+  {
+      'metadata_version':'1.1',
+      'status': ['preview'],
+      'supported_by': ['ix-team']
+  }
+NETWORK_OS: ix
+RESOURCE: device_interfaces
+COPYRIGHT: Copyright 2019 Red Hat
+LICENSE: gpl-3.0.txt
+
+DOCUMENTATION: |
 module: ix_device_interfaces
-short_description:
-description:
+short_description: "Configures interfaces on NEC IX switches."
+description: "This module configures interfaces on NEC IX switches."
 version_added: "1.1.0"
 author:
-  - "Chihiro Nakayama"
+  - "Chihiro Nakayama (@nakayumc0278)"
 notes:
-  - Tested against NEC IX2105 Version 10.2.39.
+  - Tested against NEC IX2215 Version 10.8.21.
   - This module works with connection network_cli.
-
 options:
   config:
     description: A dictionary of interface options.
@@ -16,73 +28,96 @@ options:
     suboptions:
       name:
         description:
-          - The name of the interface, e.g. GitEthernet0.0, Loopback0, etc.
+        - The name of the interface, e.g. GitEthernet0.0, Loopback0, etc.
         type: str
         required: true
       duplex:
         description:
-          - The duplex mode of the interface.
+        - The duplex mode of the interface.
         type: str
         choices:
-          - auto
-          - full
-          - half
+        - auto
+        - full
+        - half
         default: auto
       keepalive:
         description:
-          - Enable device keepalive
-        type: int
+        - Enable device keepalive
+        suboptions:
+          down_notification_time:
+            description:
+            - The notification time of the keepalive.
+            type: int
+          down_notification_count:
+            description:
+            - The notification count of the keepalive.
+            type: int
       mdix:
         description:
-          - The MDI/MDIX mode of the interface.
+        - The MDI/MDIX mode of the interface.
         type: str
         choices:
-          - mdi
-          - mdix
+        - mdi
+        - mdix
       output-buffer:
         description:
-          - The number of output buffers.
+        - The number of output buffers.
         type: int
       sflow:
         description:
-          - The sFlow configuration of the interface.
-        max_header_size:
-          description:
+        - The sFlow configuration of the interface.
+        suboptions:
+          max_header_size:
+            description:
             - The maximum header size of the sFlow.
-          type: int
-        polling_interval:
-          description:
+            type: int
+          polling_interval:
+            description:
             - The polling interval of the sFlow.
-          type: int
-        sampling_rate:
-          description:
+            type: int
+          sampling_rate:
+            description:
             - The sampling rate of the sFlow.
-          type: int
+              suboptions:
+                in:
+                  description:
+                  - The sampling rate in.
+                  type: int
+                out:
+                  description:
+                  - The sampling rate out.
+                  type: int
       speed:
         description:
-          - The speed of the interface.
+        - The speed of the interface.
         type: str
         choices:
-          - 10
-          - 100
-          - 1000
-          - auto
+        - 10
+        - 100
+        - 1000
+        - auto
   reset:
-    name:
-      description:
+    description:
+    - Reset the interface configuration to the default.
+    type: dict
+    suboptions:
+      name:
+        description:
         - The name of the interface, e.g. GitEthernet0.0, Loopback0, etc.
-      type: bool
+        type: str
   state:
     description:
-      - The state of the interface configuration.
+    - The state of the interface configuration.
     type: str
     choices:
-      - merged
-      - replaced
-      - overridden
-      - deleted
-      - rendered
-      - gathered
-      - purged
-      - parsed
+    - merged
+    - replaced
+    - overridden
+    - deleted
+    - rendered
+    - gathered
+    - purged
+    - parsed
     default: merged
+EXAMPLES:
+  - device_interfaces.txt
