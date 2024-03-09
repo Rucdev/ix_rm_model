@@ -1,0 +1,6 @@
+- name: Example device_interface module
+  rucdev.ix.device_interface:
+    config:
+      name: GigaEthernet0
+      duplex: full
+      speed: auto
