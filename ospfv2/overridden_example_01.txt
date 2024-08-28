@@ -1,0 +1,10 @@
+# Using overridden
+
+- name: Overrides all device configuration with provided configuration
+  rucdev.ix.ix_ospfv2:
+    config:
+      processess:
+        - process_id: 1
+          areas:
+            area_id: 0
+    state: overridden

@@ -1,0 +1,16 @@
+# Using merged
+
+- name: Merge provided configuration with device configuration
+  rucdev.ix.ix_ospfv2:
+    config:
+      - processes: 1
+        areas:
+          - area_id: "0"
+            nssa:
+              default_metric: 10
+        network:
+          address: 198.51.0.126/25
+          area: "0"
+        default_metric: 150
+            
+    state: merged
