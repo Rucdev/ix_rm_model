@@ -1,0 +1,7 @@
+# Using deleted
+
+- name: Delete or return interface parameters to default settings
+  rucdev.ix.ix_ospf_interfaces:
+    config:
+      - name: GigaEthernet0.1
+    state: deleted

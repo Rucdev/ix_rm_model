@@ -1,0 +1,9 @@
+# Using replaced
+
+- name: Replaces device configuration of listed interfaces with provided configuration
+  rucdev.ix.ix_ospf_interfaces:
+    config:
+      - name: GigaEthernet0.1
+        address_family:
+          afi: ipv4
+    state: replaced
