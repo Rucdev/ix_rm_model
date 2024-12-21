@@ -1,0 +1,7 @@
+# Using replaced
+
+- name: Replaces device configuration of listed interfaces with provided configuration
+  rucdev.ix.ix_ospfv3:
+    config:
+      - process_id: 1
+    state: replaced

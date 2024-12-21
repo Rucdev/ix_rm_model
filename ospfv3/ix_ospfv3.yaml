@@ -9,12 +9,12 @@ notes:
   - Tested against NEC IX version 10.2.39 on IX 2105.
 options:
   config:
-    description: A dictionary of OSPF options.
+    description: A dictionary of OSPFv3 options.
     type: dict
     suboptions:
       processes:
         description:
-          - List of OSPF instance.
+          - List of OSPFv3 instance.
         type: list
         elements: dict
         suboptions:
@@ -36,29 +36,6 @@ options:
                 description:
                   - The default cost vaule of area
                 type: int
-              nssa:
-                description:
-                  - Settings for configuring the area as a nssa
-                type: dict
-                suboptions:
-                  no_summary:
-                    description: Do not send summary LSA to Not-So-Stubby area
-                    type: bool
-                  translate:
-                    description: Always convert Type-7 LSA to Type-5 LSA
-                    type: bool
-                  stability_interval:
-                    description: The time to keep translations running after you are no longer a Translator
-                    type: int
-                  default_metric:
-                    description: The cost of Type-7 default route advertised to NSSA
-                    type: int
-                  default_metric_type:
-                    description: Type-7 default route type to be advertised to NSSA
-                    type: int
-                    choices:
-                      - 1
-                      - 2
               ranges:
                 description: Setting configuration of address range for area
                 type: list
@@ -82,37 +59,6 @@ options:
                   no_summary:
                     description: Do not send summary LSA to stub area
                     type: bool
-              virtual_links:
-                description:
-                  - Setting configuration for virtual-link
-                  - The maximum number of Virtual-links that can be configured is 16
-                type: list
-                elements: dict
-                suboptions:
-                  address:
-                    description: Opposite address of the virtual link
-                    type: str
-                  authentication:
-                    description: Virtual link authentication
-                    type: dict
-                    suboptions:
-                      auth_type:
-                        description: Virtual link authentication type
-                        type: str
-                        default: "null"
-                        choices:
-                          - "text"
-                          - "message-digest"
-                          - "null"
-                      text_password:
-                        description: Authentication text password
-                        type: str
-                      message_digest_key_id:
-                        description: Message digest key id(1~255)
-                        type: int
-                      message_digest_password:
-                        description: Message digest password
-                        type: str
                   dead_interval:
                     description: Dead interval (seconds)
                     type: int
@@ -179,19 +125,6 @@ options:
               area:
                 description: Set the OSPF area ID
                 type: str
-          nssa_range:
-            type: list
-            elements: dict
-            suboptions:
-              range:
-                description: The range of aggregated route
-                type: str
-              not_advertise:
-                description: Whether to distribute aggregated route
-                type: bool
-              tag:
-                description: The tag to attach to aggregated route
-                type: str
           originate_default:
             description: Setting of configure the default route
             type: dict
@@ -214,15 +147,6 @@ options:
             description:
               - Setting of configure the specified interface not to send or receive OSPF packets
             type: str
-          rib:
-            description:
-              - Setting of rib
-              - A process restart is required for the settings to take effect
-            type: dict
-            suboptions:
-              max_entries:
-                description: Setting of the max entries(64 ~ 65535)
-                type: int
           router_id:
             description: 
               - Setting of router id
