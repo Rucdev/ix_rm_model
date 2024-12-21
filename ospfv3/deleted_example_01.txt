@@ -1,7 +1,7 @@
 # Using deleted
 
 - name: Delete or return interface parameters to default settings
-  rucdev.ix.ix_ospfv2:
+  rucdev.ix.ix_ospfv3:
     config:
       - processes: 1
     state: deleted
