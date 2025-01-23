@@ -1,0 +1,83 @@
+ANSIBLE_METADATA: |
+  {
+      'metadata_version':'1.1',
+      'status': ['preview'],
+      'supported_by': ['ix-team']
+  }
+NETWORK_OS: ix
+RESOURCE: ntp
+COPYRIGHT: Copyright 2024 AP Communications, Inc.
+EXAMPLES:
+  - ntp.txt
+
+DOCUMENTATION: |
+module: ix_ntp
+short_description: "Configure ntp on NEC IX switches."
+description: "This module configures ntp on NEC IX switches."
+version_added: "1.1.0"
+author:
+  - "Chihiro Nakayama (@nakayumc0278)"
+notes:
+  - Tested against NEC IX2215 Version 10.8.21.
+  - This module works with connection network_cli.
+options:
+  config:
+    description: A dictionary of ntp options.
+    type: dict
+    suboptions:
+      address_families:
+        description: "The address family of the ntp."
+        type: str
+        choices:
+          - ipv4
+          - ipv6
+        suboptions:
+          enable:
+            description: "Enable the ntp."
+            type: bool
+          access_list:
+            description: "The access list of the ntp."
+            type: str
+      master:
+        description: "The master of the ntp."
+        default: 8
+        type: int
+      retry:
+        description: "The retry of the ntp."
+        type: int
+      servers:
+        description: "The server of the ntp."
+        type: list
+        elements: dict
+        suboptions:
+          address:
+            description: "The address of the ntp."
+            type: str
+          priority:
+            description: "The priority of the ntp."
+            default: 1
+            type: int
+          retry:
+            description: "The retry of the ntp."
+            default: 0
+            type: int
+          source:
+            description: "The source of the ntp."
+            type: str
+          timeout:
+            description: "The timeout of the ntp."
+            default: 64
+            type: int
+          version:
+            description: "The version of the ntp."
+            default: 3
+            type: int
+      source:
+        description: "The source of the ntp."
+        type: str
+      vrf:
+        description: "The VRF name of the static route."
+        type: str
+      interval:
+        description: "The interval of the ntp."
+        type: int
