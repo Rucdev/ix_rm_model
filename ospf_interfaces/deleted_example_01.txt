@@ -4,11 +4,11 @@
 # -------------
 # router-ix(config)# show running-config interface
 # interface GigaEthernet0.0
-#   ip address 192.0.2.0/24
-#   ip ospf priority 20
-#   ip ospf network point-to-point
-#   ip ospf cost 100
-#   no shutdown
+#  ip address 192.0.2.0/24
+#  ip ospf priority 20
+#  ip ospf network point-to-point
+#  ip ospf cost 100
+#  no shutdown
 
 - name: Delete or return interface parameters to default settings
   rucdev.ix.ix_ospf_interfaces:
@@ -32,5 +32,5 @@
 # -------------
 # router-ix(config)# show running-config interface
 # interface GigaEthernet0.0
-#   ip address 192.0.2.0/24
-#   no shutdown
+#  ip address 192.0.2.0/24
+#  no shutdown

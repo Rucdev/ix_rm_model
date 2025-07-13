@@ -3,15 +3,20 @@
 # Before state
 # -------------
 # router-ix(config)# show running-config interface
-interface GigaEthernet0.0
-  ip ospf priority 20
-  ip ospf network point-to-point
+# interface GigaEthernet0.0
+#  ip address 192.0.2.0/24
+#  ip ospf priority 50
+#  ip ospf network point-to-point
+#  no shutdown
+
 - name: Overrides all device configuration with provided configuration
   rucdev.ix.ix_ospf_interfaces:
     config:
-      - name: GigaEthernet0.1
+      - name: GigaEthernet0.0
         address_family:
           afi: ipv4
+          priority: 50
+          hello_interval: 15
     state: overridden
 
 # Task Output:
@@ -21,19 +26,26 @@ interface GigaEthernet0.0
 #     address_family:
 #       - afi: ipv4
 #         priority: 20
-#         cost: 100
 #         network: point-to-point
 # 
 # commands:
-# - interface GigaEthernet0.0
-# - ip ospf mtu-ignore
-# - ip ospf priority 40
+#  - interface GigaEthernet0.0
+#  - no ip ospf network point-to-point
+#  - ip ospf priority 50
+#  - ip ospf hello-interval 15
 # 
 # after:
 #   - name: GigaEthernet0.0
 #     address_family:
 #       - afi: ipv4
-#         priority: 40
-#         cost: 100
-#         mtu_ignore: true
-#         network: point-to-point
+#         priority: 50
+#         hello_interval: 15
+
+# After state
+# -------------
+# router-ix(config)# show running-config interface
+# interface GigaEthernet0.0
+#  ip address 192.0.2.0/24
+#  ip ospf priority 20
+#  ip ospf hello-interval 15
+#  no shutdown

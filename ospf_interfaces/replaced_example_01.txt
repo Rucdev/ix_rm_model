@@ -1,9 +1,54 @@
 # Using replaced
 
-- name: Replaces device configuration of listed interfaces with provided configuration
+# Before state
+# -------------
+# router-ix(config)# show running-config interface
+# interface GigaEthernet0.0
+#  ip address 192.0.2.0/24
+#  ip ospf priority 20
+#  ip ospf network point-to-point
+#  ip ospf cost 100
+#  no shutdown
+
+- name: Merge provided configuration with device configuration
   rucdev.ix.ix_ospf_interfaces:
     config:
-      - name: GigaEthernet0.1
+      - name: GigaEthernet0.0
         address_family:
-          afi: ipv4
-    state: replaced
+          - afi: ipv4
+            priority: 30
+            cost: 200
+    state: merged
+
+# Task Output:
+# -------------
+# before:
+#   - name: GigaEthernet0.0
+#     address_family:
+#       - afi: ipv4
+#         priority: 20
+#         cost: 100
+#         network: point-to-point
+# 
+# commands:
+# - interface GigaEthernet0.0
+# - ip ospf network point-to-point
+# - ip ospf priority 30
+# - ip ospf cost 200
+# 
+# after:
+#   - name: GigaEthernet0.0
+#     address_family:
+#       - afi: ipv4
+#         priority: 30
+#         cost: 200
+
+# After state
+# -------------
+# router-ix(config)# show running-config interface
+# interface GigaEthernet0.0
+#   ip address 192.0.2.0/24
+#   ip ospf priority 30
+#   ip ospf cost 200
+#   no shutdown
+

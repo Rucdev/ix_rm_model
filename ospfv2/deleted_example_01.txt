@@ -1,7 +1,50 @@
 # Using deleted
 
-- name: Delete or return interface parameters to default settings
-  rucdev.ix.ix_ospfv3:
+# Before state
+# -------------
+# router-ix(config)# show running-config ospf
+# ip router ospf 200
+#  router-id 192.168.1.1
+#  compatible rfc1583
+#  distribute-list prefix test_prefix
+#  network 192.168.0.0/24 area 0
+#  area 0 default-cost 10
+#  passive-interface GigaEthernet0.0
+
+- name: Delete OSPF process configuration
+  rucdev.ix.ix_ospfv2:
     config:
-      - processes: 1
+      processes:
+        - process_id: 200
     state: deleted
+
+# Task Output:
+# -------------
+# before:
+#   processes:
+#     - process_id: 200
+#       router_id: 192.168.1.1
+#       compatible:
+#         rfc1583: true
+#       distribute_list:
+#         type: prefix
+#         name: test_prefix
+#       network:
+#         - address: 192.168.0.0/24
+#           area: "0"
+#       areas:
+#         - area_id: "0"
+#           default_cost: 10
+#       passive_interfaces:
+#         - GigaEthernet0.0
+#
+# commands:
+#   - no ip router ospf 200
+#
+# after:
+#   processes: []
+
+# After state
+# -------------
+# router-ix(config)# show running-config ospf
+# （OSPF設定なし）

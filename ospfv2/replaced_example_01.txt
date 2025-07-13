@@ -1,9 +1,79 @@
 # Using replaced
 
-- name: Replaces device configuration of listed interfaces with provided configuration
-  rucdev.ix.ix_l3_interfaces:
+# Before state
+# -------------
+# router-ix(config)# show running-config ospf
+# ip router ospf 200
+#  router-id 192.168.1.1
+#  compatible rfc1583
+#  distribute-list prefix test_prefix
+#  network 192.168.0.0/24 area 0
+#  area 0
+#  area 0 default-cost 10
+#  passive-interface GigaEthernet0.0
+
+- name: Replaces device OSPF configuration with provided configuration
+  rucdev.ix.ix_ospfv2:
     config:
-      - name: GigaEthernet0.0
-        ipv4:
-          address: 192.168.1.1/24
+      processes:
+        - process_id: 200
+          router_id: "192.168.2.1"
+          default_metric: 10
+          network:
+            - address: "192.168.0.0/24"
+              area: "0"
+          areas:
+            - area_id: "0"
+              default_cost: 20
     state: replaced
+
+# Task Output:
+# -------------
+# before:
+#   processes:
+#     - process_id: 200
+#       router_id: 192.168.1.1
+#       compatible:
+#         rfc1583: true
+#       distribute_list:
+#         type: prefix
+#         name: test_prefix
+#       network:
+#         - address: 192.168.0.0/24
+#           area: "0"
+#       areas:
+#         - area_id: "0"
+#           default_cost: 10
+#       passive_interfaces:
+#         - GigaEthernet0.0
+#
+# commands:
+#   - ip router ospf 200
+#   - router-id 192.168.2.1
+#   - no compatible rfc1583
+#   - default-metric 10
+#   - no distribute-list prefix test_prefix
+#   - area 0 default-cost 20
+#   - no passive-interface GigaEthernet0.0
+#
+# after:
+#   processes:
+#     - process_id: 200
+#       router_id: 192.168.2.1
+#       default_metric: 10
+#       network:
+#         - address: 192.168.0.0/24
+#           area: "0"
+#       areas:
+#         - area_id: "0"
+#           default_cost: 20
+
+# After state
+# -------------
+# router-ix(config)# show running-config ospf
+# ip router ospf 200
+#  router-id 192.168.2.1
+#  default-metric 10
+#  network 192.168.0.0/24 area 0
+#  area 0
+#  area 0 default-cost 20

@@ -1,14 +1,89 @@
 # Using merged
 
-- name: Merge provided configuration with device configuration
+# Before state
+# -------------
+# router-ix(config)# show running-config ospf
+# ipv6 router ospf 200
+#  router-id 192.168.1.1
+#  network GigaEthernet0.0 area 0
+#  area 0
+#  passive-interface GigaEthernet0.0
+
+- name: Merge provided OSPFv3 configuration with device configuration
   rucdev.ix.ix_ospfv3:
     config:
-      - processes: 1
-        areas:
-          - area_id: "0"
-        network:
-          address: 198.51.0.126/25
-          area: "0"
-        default_metric: 150
-            
+      processes:
+        - process_id: 200
+          router_id: "192.168.1.1"
+          network:
+            - interface: "GigaEthernet0.0"
+              area: "0"
+            - interface: "GigaEthernet0.1"
+              area: "10"
+          areas:
+            - area_id: "0"
+            - area_id: "10"
+              default_cost: 10
+              stub:
+                set: true
+                no_summary: true
+          passive_interfaces:
+            - GigaEthernet0.0
+            - GigaEthernet0.2
     state: merged
+
+# Task Output:
+# -------------
+# before:
+#   processes:
+#     - process_id: 200
+#       router_id: 192.168.1.1
+#       network:
+#         - interface: GigaEthernet0.0
+#           area: "0"
+#       areas:
+#         - area_id: "0"
+#       passive_interfaces:
+#         - GigaEthernet0.0
+#
+# commands:
+#   - ipv6 router ospf 200
+#   - network GigaEthernet0.1 area 10
+#   - area 10
+#   - area 10 default-cost 10
+#   - area 10 stub no-summary
+#   - passive-interface GigaEthernet0.2
+#
+# after:
+#   processes:
+#     - process_id: 200
+#       router_id: 192.168.1.1
+#       network:
+#         - interface: GigaEthernet0.0
+#           area: "0"
+#         - interface: GigaEthernet0.1
+#           area: "10"
+#       areas:
+#         - area_id: "0"
+#         - area_id: "10"
+#           default_cost: 10
+#           stub:
+#             set: true
+#             no_summary: true
+#       passive_interfaces:
+#         - GigaEthernet0.0
+#         - GigaEthernet0.2
+
+# After state
+# -------------
+# router-ix(config)# show running-config ospf
+# ipv6 router ospf 200
+#  router-id 192.168.1.1
+#  network GigaEthernet0.0 area 0
+#  network GigaEthernet0.1 area 10
+#  area 0
+#  area 10
+#  area 10 default-cost 10
+#  area 10 stub no-summary
+#  passive-interface GigaEthernet0.0
+#  passive-interface GigaEthernet0.2

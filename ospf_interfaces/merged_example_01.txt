@@ -4,11 +4,11 @@
 # -------------
 # router-ix(config)# show running-config interface
 # interface GigaEthernet0.0
-#   ip address 192.0.2.0/24
-#   ip ospf priority 20
-#   ip ospf cost 100
-#   ip ospf network point-to-point
-#   no shutdown
+#  ip address 192.0.2.0/24
+#  ip ospf priority 20
+#  ip ospf cost 100
+#  ip ospf network point-to-point
+#  no shutdown
 
 - name: Merge provided configuration with device configuration
   rucdev.ix.ix_ospf_interfaces:
@@ -48,10 +48,10 @@
 # -------------
 # router-ix(config)# show running-config interface
 # interface GigaEthernet0.0
-#   ip address 192.0.2.0/24
-#   ip ospf priority 20
-#   ip ospf cost 100
-#   ip ospf network point-to-point
-#   ip ospf mtu-ignore
-#   ip ospf priority 40
-#   no shutdown
+#  ip address 192.0.2.0/24
+#  ip ospf priority 20
+#  ip ospf cost 100
+#  ip ospf network point-to-point
+#  ip ospf mtu-ignore
+#  ip ospf priority 40
+#  no shutdown
