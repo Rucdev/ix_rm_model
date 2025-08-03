@@ -39,4 +39,4 @@
 # After state
 # -------------
 # router-ix(config)# show running-config ospf
-# （OSPFv3設定なし）
+# 

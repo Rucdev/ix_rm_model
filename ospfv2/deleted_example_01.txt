@@ -47,4 +47,4 @@
 # After state
 # -------------
 # router-ix(config)# show running-config ospf
-# （OSPF設定なし）
+# 
