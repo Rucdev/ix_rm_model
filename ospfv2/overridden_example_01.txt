@@ -1,0 +1,132 @@
+# Using overridden
+
+# Before state
+# -------------
+# router-ix(config)# show running-config ospf
+# ip router ospf 200
+#  router-id 192.168.1.1
+#  compatible rfc1583
+#  distribute-list prefix test_prefix
+#  network 192.168.0.0/24 area 0
+#  area 0
+#  area 0 default-cost 10
+#  passive-interface GigaEthernet0.0
+
+- name: Overrides all device OSPF configuration with provided configuration
+  rucdev.ix.ix_ospfv2:
+    config:
+      processes:
+        - process_id: 100
+          router_id: "10.10.10.10"
+          default_metric: 20
+          distance:
+            external: 110
+            inter_area: 90
+            intra_area: 80
+          distribute_list:
+            type: route-map
+            name: new_route_map
+          network:
+            - address: "10.0.0.0/24"
+              area: "5"
+          areas:
+            - area_id: "5"
+              nssa:
+                no_summary: true
+                translate: true
+                stability_interval: 10
+                default_metric: 20
+                default_metric_type: 1
+            - area_id: "10"
+              stub:
+                set: true
+                no_summary: true
+          originate_default:
+            always: true
+            metric: 100
+            metric_type: 1
+            route_map: "default_map"
+    state: overridden
+
+# Task Output:
+# -------------
+# before:
+#   processes:
+#     - process_id: 200
+#       router_id: 192.168.1.1
+#       compatible:
+#         rfc1583: true
+#       distribute_list:
+#         type: prefix
+#         name: test_prefix
+#       network:
+#         - address: 192.168.0.0/24
+#           area: "0"
+#       areas:
+#         - area_id: "0"
+#           default_cost: 10
+#       passive_interfaces:
+#         - GigaEthernet0.0
+#
+# commands:
+#   - no ip router ospf 200
+#   - ip router ospf 100
+#   - router-id 10.10.10.10
+#   - default-metric 20
+#   - distance external 110 inter-area 90 intra-area 80 nssa-external 110
+#   - distribute-list route-map new_route_map
+#   - network 10.0.0.0/24 area 5
+#   - area 5
+#   - area 5 nssa no-summary stability-interval 10 translate default-metric 20 default-metric-type 1
+#   - area 10
+#   - area 10 stub no-summary
+#   - originate-default always metric 100 metric-type 1 route-map default_map
+#
+# after:
+#   processes:
+#     - process_id: 100
+#       router_id: 10.10.10.10
+#       default_metric: 20
+#       distance:
+#         external: 110
+#         inter_area: 90
+#         intra_area: 80
+#         nssa_external: 110
+#       distribute_list:
+#         type: route-map
+#         name: new_route_map
+#       network:
+#         - address: 10.0.0.0/24
+#           area: "5"
+#       areas:
+#         - area_id: "5"
+#           nssa:
+#             no_summary: true
+#             translate: true
+#             stability_interval: 10
+#             default_metric: 20
+#             default_metric_type: 1
+#         - area_id: "10"
+#           stub:
+#             set: true
+#             no_summary: true
+#       originate_default:
+#         always: true
+#         metric: 100
+#         metric_type: 1
+#         route_map: default_map
+
+# After state
+# -------------
+# router-ix(config)# show running-config ospf
+# ip router ospf 100
+#  router-id 10.10.10.10
+#  default-metric 20
+#  distance external 110 inter-area 90 intra-area 80 nssa-external 110
+#  distribute-list route-map new_route_map
+#  network 10.0.0.0/24 area 5
+#  area 5
+#  area 5 nssa no-summary stability-interval 10 translate default-metric 20 default-metric-type 1
+#  area 10
+#  area 10 stub no-summary
+#  originate-default always metric 100 metric-type 1 route-map default_map

@@ -1,0 +1,101 @@
+# Using merged
+
+# Before state
+# -------------
+# router-ix(config)# show running-config ospf
+# ip router ospf 200
+#  router-id 192.168.1.1
+#  compatible rfc1583
+#  distribute-list prefix test_prefix
+#  network 192.168.0.0/24 area 0
+#  area 0
+#  passive-interface GigaEthernet0.0
+
+- name: Merge provided OSPF configuration with device configuration
+  rucdev.ix.ix_ospfv2:
+    config:
+      processes:
+        - process_id: 200
+          router_id: "192.168.1.1"
+          compatible:
+            rfc1583: true
+          network:
+            - address: "192.168.0.0/24"
+              area: "0"
+            - address: "10.0.0.0/24"
+              area: "10"
+          areas:
+            - area_id: "0"
+            - area_id: "10"
+              default_cost: 10
+              nssa:
+                no_summary: true
+                translate: true
+          passive_interfaces:
+            - GigaEthernet0.0
+            - GigaEthernet0.1
+    state: merged
+
+# Task Output:
+# -------------
+# before:
+#   processes:
+#     - process_id: 200
+#       router_id: 192.168.1.1
+#       compatible:
+#         rfc1583: true
+#       distribute_list:
+#         type: prefix
+#         name: test_prefix
+#       network:
+#         - address: 192.168.0.0/24
+#           area: "0"
+#       areas:
+#         - area_id: "0"
+#       passive_interfaces:
+#         - GigaEthernet0.0
+#
+# commands:
+#   - ip router ospf 200
+#   - network 10.0.0.0/24 area 10
+#   - area 10
+#   - area 10 default-cost 10
+#   - area 10 nssa no-summary translate
+#   - passive-interface GigaEthernet0.1
+#
+# after:
+#   processes:
+#     - process_id: 200
+#       router_id: 192.168.1.1
+#       compatible:
+#         rfc1583: true
+#       network:
+#         - address: 192.168.0.0/24
+#           area: "0"
+#         - address: 10.0.0.0/24
+#           area: "10"
+#       areas:
+#         - area_id: "0"
+#         - area_id: "10"
+#           default_cost: 10
+#           nssa:
+#             no_summary: true
+#             translate: true
+#       passive_interfaces:
+#         - GigaEthernet0.0
+#         - GigaEthernet0.1
+
+# After state
+# -------------
+# router-ix(config)# show running-config ospf
+# ip router ospf 200
+#  router-id 192.168.1.1
+#  compatible rfc1583
+#  network 192.168.0.0/24 area 0
+#  network 10.0.0.0/24 area 10
+#  area 0
+#  area 10
+#  area 10 default-cost 10
+#  area 10 nssa no-summary translate
+#  passive-interface GigaEthernet0.0
+#  passive-interface GigaEthernet0.1

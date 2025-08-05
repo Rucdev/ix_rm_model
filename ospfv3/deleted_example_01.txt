@@ -1,0 +1,42 @@
+# Using deleted
+
+# Before state
+# -------------
+# router-ix(config)# show running-config ospf
+# ipv6 router ospf 200
+#  router-id 192.168.1.1
+#  network GigaEthernet0.0 area 0
+#  area 0
+#  passive-interface GigaEthernet0.0
+
+- name: Delete OSPFv3 process configuration
+  rucdev.ix.ix_ospfv3:
+    config:
+      processes:
+        - process_id: 200
+    state: deleted
+
+# Task Output:
+# -------------
+# before:
+#   processes:
+#     - process_id: 200
+#       router_id: 192.168.1.1
+#       network:
+#         - interface: GigaEthernet0.0
+#           area: "0"
+#       areas:
+#         - area_id: "0"
+#       passive_interfaces:
+#         - GigaEthernet0.0
+#
+# commands:
+#   - no ipv6 router ospf 200
+#
+# after:
+#   processes: []
+
+# After state
+# -------------
+# router-ix(config)# show running-config ospf
+# 

@@ -1,0 +1,92 @@
+# Using overridden
+
+# Before state
+# -------------
+# router-ix(config)# show running-config ospf
+# ipv6 router ospf 200
+#  router-id 192.168.1.1
+#  network GigaEthernet0.0 area 0
+#  area 0
+#  passive-interface GigaEthernet0.0
+
+- name: Overrides all device OSPFv3 configuration with provided configuration
+  rucdev.ix.ix_ospfv3:
+    config:
+      processes:
+        - process_id: 100
+          router_id: "10.10.10.10"
+          distance:
+            external: 110
+            inter_area: 90
+            intra_area: 80
+          network:
+            - interface: "GigaEthernet0.0"
+              area: "5"
+          areas:
+            - area_id: "10"
+              stub:
+                set: true
+                no_summary: true
+          originate_default:
+            metric: 100
+            metric_type: 1
+            route_map: "default_map"
+            tag: "20"
+    state: overridden
+
+# Task Output:
+# -------------
+# before:
+#   processes:
+#     - process_id: 200
+#       router_id: 192.168.1.1
+#       network:
+#         - interface: GigaEthernet0.0
+#           area: "0"
+#       areas:
+#         - area_id: "0"
+#       passive_interfaces:
+#         - GigaEthernet0.0
+#
+# commands:
+#   - no ipv6 router ospf 200
+#   - ipv6 router ospf 100
+#   - router-id 10.10.10.10
+#   - distance external 110 inter-area 90 intra-area 80
+#   - network GigaEthernet0.0 area 5
+#   - area 10
+#   - area 10 stub no-summary
+#   - originate-default metric 100 metric-type 1 route-map default_map tag 20
+#
+# after:
+#   processes:
+#     - process_id: 100
+#       router_id: 10.10.10.10
+#       distance:
+#         external: 110
+#         inter_area: 90
+#         intra_area: 80
+#       network:
+#         - interface: GigaEthernet0.0
+#           area: "5"
+#       areas:
+#         - area_id: "10"
+#           stub:
+#             set: true
+#             no_summary: true
+#       originate_default:
+#         metric: 100
+#         metric_type: 1
+#         route_map: default_map
+#         tag: "20"
+
+# After state
+# -------------
+# router-ix(config)# show running-config ospf
+# ipv6 router ospf 100
+#  router-id 10.10.10.10
+#  distance external 110 inter-area 90 intra-area 80
+#  network GigaEthernet0.0 area 5
+#  area 10
+#  area 10 stub no-summary
+#  originate-default metric 100 metric-type 1 route-map default_map tag 20
