@@ -10,7 +10,7 @@
 #  ip ospf network point-to-point
 #  no shutdown
 
-- name: Merge provided configuration with device configuration
+- name: Merge provided OSPF interface configuration with device configuration
   rucdev.ix.ix_ospf_interfaces:
     config:
       - name: GigaEthernet0.0
@@ -18,6 +18,17 @@
           - afi: ipv4
             mtu_ignore: true
             priority: 40
+            dead_interval: 40
+            hello_interval: 10
+      - name: GigaEthernet0.1
+        address_family:
+          - afi: ipv4
+            cost: 150
+            interface_type: broadcast
+            authentication_type: message-digest
+            message_digest_key:
+              key_id: 1
+              password: "test123"
     state: merged
 
 # Task Output:
@@ -28,13 +39,19 @@
 #       - afi: ipv4
 #         priority: 20
 #         cost: 100
-#         network: point-to-point
-# 
+#         interface_type: point-to-point
+#
 # commands:
-# - interface GigaEthernet0.0
-# - ip ospf mtu-ignore
-# - ip ospf priority 40
-# 
+#   - interface GigaEthernet0.0
+#   - ip ospf mtu-ignore
+#   - ip ospf priority 40
+#   - ip ospf dead-interval 40
+#   - ip ospf hello-interval 10
+#   - interface GigaEthernet0.1
+#   - ip ospf cost 150
+#   - ip ospf network broadcast
+#   - ip ospf message-digest-key 1 md5 test123
+#
 # after:
 #   - name: GigaEthernet0.0
 #     address_family:
@@ -42,16 +59,32 @@
 #         priority: 40
 #         cost: 100
 #         mtu_ignore: true
-#         network: point-to-point
+#         interface_type: point-to-point
+#         dead_interval: 40
+#         hello_interval: 10
+#   - name: GigaEthernet0.1
+#     address_family:
+#       - afi: ipv4
+#         cost: 150
+#         interface_type: broadcast
+#         authentication_type: message-digest
+#         message_digest_key:
+#           key_id: 1
+#           password: test123
 
 # After state
 # -------------
 # router-ix(config)# show running-config interface
 # interface GigaEthernet0.0
 #  ip address 192.0.2.0/24
-#  ip ospf priority 20
+#  ip ospf priority 40
 #  ip ospf cost 100
 #  ip ospf network point-to-point
 #  ip ospf mtu-ignore
-#  ip ospf priority 40
+#  ip ospf dead-interval 40
+#  ip ospf hello-interval 10
 #  no shutdown
+# interface GigaEthernet0.1
+#  ip ospf cost 150
+#  ip ospf network broadcast
+#  ip ospf message-digest-key 1 md5 test123

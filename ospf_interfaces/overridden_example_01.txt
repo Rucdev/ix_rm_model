@@ -6,17 +6,37 @@
 # interface GigaEthernet0.0
 #  ip address 192.0.2.0/24
 #  ip ospf priority 50
+#  ip ospf cost 200
 #  ip ospf network point-to-point
+#  ip ospf hello-interval 10
 #  no shutdown
+# interface GigaEthernet0.1
+#  ip ospf cost 100
+#  ip ospf network broadcast
+#  ip ospf message-digest-key 1 md5 oldkey123
 
-- name: Overrides all device configuration with provided configuration
+- name: Overrides all device OSPF interface configuration with provided configuration
   rucdev.ix.ix_ospf_interfaces:
     config:
       - name: GigaEthernet0.0
         address_family:
-          afi: ipv4
-          priority: 50
-          hello_interval: 15
+          - afi: ipv4
+            priority: 30
+            cost: 150
+            interface_type: broadcast
+            retransmit_interval: 5
+            transmit_delay: 2
+            authentication_type: message-digest
+            message_digest_key:
+              key_id: 2
+              password: "newkey456"
+      - name: GigaEthernet0.2
+        address_family:
+          - afi: ipv4
+            priority: 10
+            dead_interval: 20
+            hello_interval: 5
+            mtu_ignore: true
     state: overridden
 
 # Task Output:
@@ -25,27 +45,73 @@
 #   - name: GigaEthernet0.0
 #     address_family:
 #       - afi: ipv4
-#         priority: 20
-#         network: point-to-point
-# 
+#         priority: 50
+#         cost: 200
+#         interface_type: point-to-point
+#         hello_interval: 10
+#   - name: GigaEthernet0.1
+#     address_family:
+#       - afi: ipv4
+#         cost: 100
+#         interface_type: broadcast
+#         authentication_type: message-digest
+#         message_digest_key:
+#           key_id: 1
+#           password: oldkey123
+#
 # commands:
-#  - interface GigaEthernet0.0
-#  - no ip ospf network point-to-point
-#  - ip ospf priority 50
-#  - ip ospf hello-interval 15
-# 
+#   - interface GigaEthernet0.0
+#   - ip ospf priority 30
+#   - ip ospf cost 150
+#   - ip ospf network broadcast
+#   - ip ospf retransmit-interval 5
+#   - ip ospf transmit-delay 2
+#   - ip ospf message-digest-key 2 md5 newkey456
+#   - interface GigaEthernet0.1
+#   - no ip ospf cost 100
+#   - no ip ospf network broadcast
+#   - no ip ospf message-digest-key 1 md5 oldkey123
+#   - interface GigaEthernet0.2
+#   - ip ospf priority 10
+#   - ip ospf dead-interval 20
+#   - ip ospf hello-interval 5
+#   - ip ospf mtu-ignore
+#
 # after:
 #   - name: GigaEthernet0.0
 #     address_family:
 #       - afi: ipv4
-#         priority: 50
-#         hello_interval: 15
+#         priority: 30
+#         cost: 150
+#         interface_type: broadcast
+#         retransmit_interval: 5
+#         transmit_delay: 2
+#         authentication_type: message-digest
+#         message_digest_key:
+#           key_id: 2
+#           password: newkey456
+#   - name: GigaEthernet0.2
+#     address_family:
+#       - afi: ipv4
+#         priority: 10
+#         dead_interval: 20
+#         hello_interval: 5
+#         mtu_ignore: true
 
 # After state
 # -------------
 # router-ix(config)# show running-config interface
 # interface GigaEthernet0.0
 #  ip address 192.0.2.0/24
-#  ip ospf priority 20
-#  ip ospf hello-interval 15
+#  ip ospf priority 30
+#  ip ospf cost 150
+#  ip ospf network broadcast
+#  ip ospf retransmit-interval 5
+#  ip ospf transmit-delay 2
+#  ip ospf message-digest-key 2 md5 newkey456
 #  no shutdown
+# interface GigaEthernet0.2
+#  ip ospf priority 10
+#  ip ospf dead-interval 20
+#  ip ospf hello-interval 5
+#  ip ospf mtu-ignore
