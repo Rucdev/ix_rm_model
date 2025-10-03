@@ -6,27 +6,46 @@
 # interface GigaEthernet0.0
 #  ip address 192.0.2.0/24
 #  ip ospf priority 20
-#  ip ospf network point-to-point
 #  ip ospf cost 100
+#  ip ospf network point-to-point
+#  ip ospf hello-interval 10
+#  ip ospf dead-interval 40
+#  ip ospf mtu-ignore
 #  no shutdown
 
-- name: Delete or return interface parameters to default settings
+- name: Delete OSPF interface configuration or return parameters to default settings
   rucdev.ix.ix_ospf_interfaces:
     config:
       - name: GigaEthernet0.0
+        address_family:
+          - afi: ipv4
     state: deleted
 
 # Task Output:
 # -------------
 # before:
 #   - name: GigaEthernet0.0
-#     address_family
-# commands:
-# - interface GigaEthernet0.0
-# - no ip ospf priority 20
-# - no ip ospf network point-to-point
-# - no ip ospf cost 100
+#     address_family:
+#       - afi: ipv4
+#         priority: 20
+#         cost: 100
+#         interface_type: point-to-point
+#         hello_interval: 10
+#         dead_interval: 40
+#         mtu_ignore: true
 #
+# commands:
+#   - interface GigaEthernet0.0
+#   - no ip ospf priority 20
+#   - no ip ospf cost 100
+#   - no ip ospf network point-to-point
+#   - no ip ospf hello-interval 10
+#   - no ip ospf dead-interval 40
+#   - no ip ospf mtu-ignore
+#
+# after:
+#   - name: GigaEthernet0.0
+#     address_family: []
 
 # After state
 # -------------

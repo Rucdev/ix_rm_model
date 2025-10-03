@@ -13,12 +13,12 @@ EXAMPLES:
   - overridden_example_01.txt
   - replaced_example_01.txt
 
-DOCUMENTATION: | 
+DOCUMENTATION: |
   module: ix_l3_interfaces
   short_description: Resource module to configure L3 interfaces.
   description:
     - This module provides declarative management of Layer-3 interface on NEC IX devices.
-  version_added: 1.1.0
+  version_added: 0.2.0
   author:
     - Yushi Takeda(@Rucdev)
   notes:
@@ -68,7 +68,7 @@ DOCUMENTATION: |
           description:
             - IPv6 address to be set for the Layer-3 logical interface mentioned in I(name) option.
             - The address format is <ipv6 address>/<mask>, the mask is number in range
-              0-128 eg. fd5d:12c9:2201:1::1/64 
+              0-128 eg. fd5d:12c9:2201:1::1/64
           type: list
           elements: dict
           suboptions:

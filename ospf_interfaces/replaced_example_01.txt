@@ -6,19 +6,24 @@
 # interface GigaEthernet0.0
 #  ip address 192.0.2.0/24
 #  ip ospf priority 20
-#  ip ospf network point-to-point
 #  ip ospf cost 100
+#  ip ospf network point-to-point
+#  ip ospf hello-interval 10
+#  ip ospf dead-interval 40
 #  no shutdown
 
-- name: Merge provided configuration with device configuration
+- name: Replaces device OSPF interface configuration with provided configuration
   rucdev.ix.ix_ospf_interfaces:
     config:
       - name: GigaEthernet0.0
         address_family:
           - afi: ipv4
-            priority: 30
-            cost: 200
-    state: merged
+            priority: 25
+            cost: 120
+            interface_type: broadcast
+            hello_interval: 15
+            retransmit_interval: 8
+    state: replaced
 
 # Task Output:
 # -------------
@@ -28,27 +33,38 @@
 #       - afi: ipv4
 #         priority: 20
 #         cost: 100
-#         network: point-to-point
-# 
+#         interface_type: point-to-point
+#         hello_interval: 10
+#         dead_interval: 40
+#
 # commands:
-# - interface GigaEthernet0.0
-# - ip ospf network point-to-point
-# - ip ospf priority 30
-# - ip ospf cost 200
-# 
+#   - interface GigaEthernet0.0
+#   - ip ospf priority 25
+#   - ip ospf cost 120
+#   - ip ospf network broadcast
+#   - ip ospf hello-interval 15
+#   - no ip ospf dead-interval 40
+#   - ip ospf retransmit-interval 8
+#
 # after:
 #   - name: GigaEthernet0.0
 #     address_family:
 #       - afi: ipv4
-#         priority: 30
-#         cost: 200
+#         priority: 25
+#         cost: 120
+#         interface_type: broadcast
+#         hello_interval: 15
+#         retransmit_interval: 8
 
 # After state
 # -------------
 # router-ix(config)# show running-config interface
 # interface GigaEthernet0.0
-#   ip address 192.0.2.0/24
-#   ip ospf priority 30
-#   ip ospf cost 200
-#   no shutdown
+#  ip address 192.0.2.0/24
+#  ip ospf priority 25
+#  ip ospf cost 120
+#  ip ospf network broadcast
+#  ip ospf hello-interval 15
+#  ip ospf retransmit-interval 8
+#  no shutdown
 
