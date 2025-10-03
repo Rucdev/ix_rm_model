@@ -14,7 +14,7 @@ DOCUMENTATION: |
 module: ix_ntp
 short_description: "Configure ntp on NEC IX switches."
 description: "This module configures ntp on NEC IX switches."
-version_added: "1.1.0"
+version_added: "0.2.0"
 author:
   - "Chihiro Nakayama (@nakayumc0278)"
 notes:
@@ -25,12 +25,8 @@ options:
     description: A dictionary of ntp options.
     type: dict
     suboptions:
-      address_families:
+      ipv4:
         description: "The address family of the ntp."
-        type: str
-        choices:
-          - ipv4
-          - ipv6
         suboptions:
           enable:
             description: "Enable the ntp."
